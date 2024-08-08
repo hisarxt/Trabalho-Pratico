@@ -26,5 +26,4 @@ private String nome, cpf, email;
 		return resposta;
 	}
 
-
 }
