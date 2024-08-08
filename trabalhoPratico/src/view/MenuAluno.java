@@ -1,9 +1,9 @@
 package view;
 
-import javax.swing.JOptionPane;
-
 import app.Aluno;
 import cadastros.CadastroAlunos;
+
+import javax.swing.*;
 
 public class MenuAluno {
 	

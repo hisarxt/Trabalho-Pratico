@@ -1,9 +1,9 @@
 package view;
 
-import javax.swing.JOptionPane;
-
 import app.Professor;
 import cadastros.CadastroProfessores;
+
+import javax.swing.*;
 
 public class MenuProfessor {
 	

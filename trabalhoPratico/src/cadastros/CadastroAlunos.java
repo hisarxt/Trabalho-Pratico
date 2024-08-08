@@ -1,9 +1,9 @@
 package cadastros;
 
+import app.Aluno;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import app.Aluno;
 
 public class CadastroAlunos {
 	int numAlunos;
