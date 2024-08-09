@@ -8,7 +8,10 @@ String matricula, curso;
 		this.matricula = matricula;
 		this.curso = curso;
 	}
-	
+
+	public Aluno() {
+	}
+
 	public final String getMatricula() {
 		return matricula;
 	}
@@ -16,6 +19,15 @@ String matricula, curso;
 	public final String getCurso() {
 		return curso;
 	}
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
+	}
+
+	public void setCurso(String curso) {
+		this.curso = curso;
+	}
+
 	protected void finalize() throws Throwable{
 		System.out.println("Destruindo objeto: " + this);
 	}
