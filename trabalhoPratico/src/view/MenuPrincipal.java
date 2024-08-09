@@ -20,16 +20,16 @@ public class MenuPrincipal {
 
 
 
-        JButton button1 = new JButton("Cadastro de alunos");
-        JButton button2 = new JButton("Cadastro de professores");
-        JButton button3 = new JButton("Cadastro de disciplinas");
-        JButton button4 = new JButton("Cadastro de turmas");
+        JButton alunosBttn = new JButton("Cadastro de alunos");
+        JButton professoresBttn = new JButton("Cadastro de professores");
+        JButton disciplinasBttn = new JButton("Cadastro de disciplinas");
+        JButton turmasBttn = new JButton("Cadastro de turmas");
 
 
-        panel.add(button1);
-        panel.add(button2);
-        panel.add(button3);
-        panel.add(button4);
+        panel.add(alunosBttn);
+        panel.add(professoresBttn);
+        panel.add(disciplinasBttn);
+        panel.add(turmasBttn);
 
 
         Object[] options = {panel};
@@ -46,7 +46,7 @@ public class MenuPrincipal {
         JDialog dialog = optionPane.createDialog("SGA - Sistema de Gestão Acadêmica");
 
 
-        button1.addActionListener(new ActionListener() {
+        alunosBttn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dialog.setVisible(false);
@@ -54,14 +54,14 @@ public class MenuPrincipal {
             }
         });
 
-        button2.addActionListener(new ActionListener() {
+        professoresBttn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MenuProfessor.menuProfessor(cadProfessor);
             }
         });
 
-        button3.addActionListener(new ActionListener() {
+        disciplinasBttn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MenuDisciplina.menuDisciplinas(cadDisciplina);
@@ -69,7 +69,7 @@ public class MenuPrincipal {
             }
         });
 
-        button4.addActionListener(new ActionListener() {
+        turmasBttn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null,"Sistema de turmas à ser implementado.");

@@ -9,7 +9,10 @@ public class Professor extends PessoaFisica{
 		this.matriculaFub = matriculaFub;
 		this.areaFormacao = areaFormacao;
 	}
-	
+
+	public Professor() {
+	}
+
 	public final String getMatriculaFub() {
 		return matriculaFub;
 	}
@@ -17,7 +20,15 @@ public class Professor extends PessoaFisica{
 	public final String getAreaFormacao() {
 		return areaFormacao;
 	}
-	
+
+	public void setMatriculaFub(String matriculaFub) {
+		this.matriculaFub = matriculaFub;
+	}
+
+	public void setAreaFormacao(String areaFormacao) {
+		this.areaFormacao = areaFormacao;
+	}
+
 	protected void finalize() throws Throwable {
 		System.out.println("Destruindo objeto: " + this);
 	}
