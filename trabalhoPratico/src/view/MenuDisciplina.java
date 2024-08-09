@@ -4,10 +4,11 @@ import app.Disciplina;
 import cadastros.CadastroDisciplinas;
 
 import javax.swing.*;
+import java.awt.event.*;
 
 public class MenuDisciplina {
 
-    private static Disciplina pesquisarCodigo(CadastroDisciplinas cadastroDisciplinas) {
+    private static Disciplina telaPesquisarDisciplina(CadastroDisciplinas cadastroDisciplinas) {
         JTextField campo1 = new JTextField();
 
         JPanel painel = new JPanel();
@@ -38,7 +39,7 @@ public class MenuDisciplina {
         return null;
     }
 
-    private static Disciplina criarDisciplina() {
+    private static Disciplina telaCriarDisciplina() {
         JTextField campo1 = new JTextField();
         JTextField campo2 = new JTextField();
 
@@ -73,15 +74,15 @@ public class MenuDisciplina {
     }
 
 
-    public static void cadastrarDisciplina(CadastroDisciplinas cadastroDisciplinas) {
-        Disciplina disciplina = criarDisciplina();
+    private static void cadastrarDisciplina(CadastroDisciplinas cadastroDisciplinas) {
+        Disciplina disciplina = telaCriarDisciplina();
         cadastroDisciplinas.cadastrarDisciplina(disciplina);
         String mensagem = "Disciplina '" + disciplina.getNome() + "' criada com sucesso.";
         JOptionPane.showMessageDialog(null, mensagem);
     }
 
-    public static void pesquisarDisciplina(CadastroDisciplinas cadastroDisciplinas) {
-        Disciplina pesquisa = pesquisarCodigo(cadastroDisciplinas);
+    private static void pesquisarDisciplina(CadastroDisciplinas cadastroDisciplinas) {
+        Disciplina pesquisa = telaPesquisarDisciplina(cadastroDisciplinas);
         if (pesquisa != null) {
             JOptionPane.showMessageDialog(null, pesquisa.toString());
         } else {
@@ -92,11 +93,11 @@ public class MenuDisciplina {
     }
 
 
-    public static void atualizarDisciplina(CadastroDisciplinas cadastroDisciplinas) {
-        Disciplina pesquisa = pesquisarCodigo(cadastroDisciplinas);
+    private static void atualizarDisciplina(CadastroDisciplinas cadastroDisciplinas) {
+        Disciplina pesquisa = telaPesquisarDisciplina(cadastroDisciplinas);
         if (pesquisa != null) {
-            Disciplina novaDisciplina = criarDisciplina();
-            cadastroDisciplinas.atualizarDisciplina(pesquisa.getCodigoDisciplina(),novaDisciplina);
+            Disciplina novaDisciplina = telaCriarDisciplina();
+            cadastroDisciplinas.atualizarDisciplina(pesquisa.getCodigoDisciplina(), novaDisciplina);
 
             String mensagem = "Disciplina '" + novaDisciplina.getNome() + "' atualizada com sucesso.";
             JOptionPane.showMessageDialog(null, mensagem);
@@ -108,8 +109,8 @@ public class MenuDisciplina {
         }
     }
 
-    public static void removerDisciplina(CadastroDisciplinas cadastroDisciplinas) {
-        Disciplina pesquisa = pesquisarCodigo(cadastroDisciplinas);
+    private static void removerDisciplina(CadastroDisciplinas cadastroDisciplinas) {
+        Disciplina pesquisa = telaPesquisarDisciplina(cadastroDisciplinas);
         cadastroDisciplinas.removerDisciplina(pesquisa);
         if (pesquisa != null) {
             cadastroDisciplinas.removerDisciplina(pesquisa);
@@ -126,33 +127,85 @@ public class MenuDisciplina {
     }
 
     public static void menuDisciplinas(CadastroDisciplinas cadastroDisciplinas) {
-        String txt = "Informe a opcao desejada \n" + "1 - Cadastrar disciplina\n" + "2 - Pesquisar disciplina\n" +
-                "3 - Atualizar disciplina\n" + "4 - Remover disciplina\n" + "0 - Voltar para o Menu";
 
-        int opcao = -1;
 
-        do {
-            String strOpcao = JOptionPane.showInputDialog(txt);
-            opcao = Integer.parseInt(strOpcao);
-
-            switch (opcao) {
-                case 1:
-                    cadastrarDisciplina(cadastroDisciplinas);
-                    break;
-                case 2:
-                    pesquisarDisciplina(cadastroDisciplinas);
-                    break;
-                case 3:
-                    atualizarDisciplina(cadastroDisciplinas);
-                    break;
-                case 4:
-                    removerDisciplina(cadastroDisciplinas);
-                    break;
-
+        WindowListener windowListener = new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                MenuPrincipal.menuOpcoes();
             }
+        };
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 
-        } while (opcao != 0);
+        JButton cadastrarDisciplinaBttn = new JButton("Cadastrar uma disciplina");
+        JButton pesquisarDisciplinaBttn = new JButton("Pesquisar uma disciplina");
+        JButton atualizarDisciplinaBttn = new JButton("Atualizar uma disciplina");
+        JButton removerDisciplinaBttn = new JButton("Remover uma disciplina");
+        JButton voltarBttn = new JButton("Voltar");
+
+
+        panel.add(cadastrarDisciplinaBttn);
+        panel.add(pesquisarDisciplinaBttn);
+        panel.add(atualizarDisciplinaBttn);
+        panel.add(removerDisciplinaBttn);
+        panel.add(voltarBttn);
+
+
+        Object[] options = {panel};
+
+        JOptionPane optionPane = new JOptionPane(
+                "Selecione sua opção:",
+                JOptionPane.PLAIN_MESSAGE,
+                JOptionPane.DEFAULT_OPTION,
+                null,
+                options,
+                null);
+
+
+        JDialog dialog = optionPane.createDialog("Disciplinas - menu");
+
+
+        cadastrarDisciplinaBttn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cadastrarDisciplina(cadastroDisciplinas);
+            }
+        });
+
+        pesquisarDisciplinaBttn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pesquisarDisciplina(cadastroDisciplinas);
+            }
+        });
+
+        atualizarDisciplinaBttn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                atualizarDisciplina(cadastroDisciplinas);
+            }
+        });
+
+        removerDisciplinaBttn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                removerDisciplina(cadastroDisciplinas);
+            }
+        });
+
+        voltarBttn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose();
+            }
+        });
+
+        dialog.addWindowListener(windowListener);
+
+        dialog.setVisible(true);
     }
 }
 

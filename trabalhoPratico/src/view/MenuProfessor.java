@@ -1,6 +1,5 @@
 package view;
 
-import app.Aluno;
 import app.Professor;
 import cadastros.CadastroProfessores;
 
