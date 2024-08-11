@@ -23,8 +23,6 @@ public class MenuDisciplina {
 
             if (resultado == JOptionPane.OK_OPTION) {
                 String codigoDaDisciplina = campo1.getText();
-
-
                 if (codigoDaDisciplina.trim().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "O campo não pode estar vazio!",
                             "Erro", JOptionPane.ERROR_MESSAGE);
@@ -60,6 +58,7 @@ public class MenuDisciplina {
                 String codigoDaDisciplina = campo2.getText();
 
                 if (nome.trim().isEmpty() || codigoDaDisciplina.trim().isEmpty()) {
+                    // Lançar aqui a CampoEmBrancoException
                     JOptionPane.showMessageDialog(null, "Nenhum campo pode estar vazio!",
                             "Erro", JOptionPane.ERROR_MESSAGE);
                 } else {

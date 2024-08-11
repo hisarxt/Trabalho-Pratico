@@ -44,6 +44,7 @@ public class MenuAluno {
 
                 if (nome.trim().isEmpty() || cpf.trim().isEmpty() || email.trim().isEmpty() || matricula.trim().isEmpty()
                         || curso.trim().isEmpty()) {
+                    // Lançar aqui a CampoEmBrancoException
                     JOptionPane.showMessageDialog(null, "Nenhum campo pode estar vazio!",
                             "Erro", JOptionPane.ERROR_MESSAGE);
                 } else {

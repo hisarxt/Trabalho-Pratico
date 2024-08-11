@@ -45,6 +45,7 @@ public class MenuProfessor {
 
                 if (nome.trim().isEmpty() || cpf.trim().isEmpty() || email.trim().isEmpty() || matriculaFub.trim().isEmpty()
                         || areaDeFormacao.trim().isEmpty()) {
+                    // Lançar aqui a CampoEmBrancoException
                     JOptionPane.showMessageDialog(null, "Nenhum campo pode estar vazio!",
                             "Erro", JOptionPane.ERROR_MESSAGE);
                 } else {
@@ -211,7 +212,9 @@ public class MenuProfessor {
 
         atualizarProfessorBttn.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) { atualizarProfessor(cadastroProfessores); }
+            public void actionPerformed(ActionEvent e) {
+                atualizarProfessor(cadastroProfessores);
+            }
         });
 
         removerProfessorBttn.addActionListener(new ActionListener() {
