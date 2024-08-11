@@ -1,9 +1,9 @@
 package cadastros;
 
+import app.Professor;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import app.Professor;
 
 public class CadastroProfessores {
 	int numProfessores;

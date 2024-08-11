@@ -1,16 +1,81 @@
 package view;
 
-import javax.swing.JOptionPane;
+import cadastros.CadastroAlunos;
+import cadastros.CadastroDisciplinas;
+import cadastros.CadastroProfessores;
 
-public class MenuPrincipal { 
-	
-	public static int menuOpcoes() {
-		String opcoes = "1 - Abrir cadastro de alunos \n" + "2 - Abrir cadastro de professores \n" + "3 - Abrir cadastro de disciplinas \n" + "4 - Abrir cadastro de turmas \n" + "0 - Sair \n";
-		
-		String strOpcao = JOptionPane.showInputDialog(opcoes);
-		int opcao = Integer.parseInt(strOpcao);
+import javax.swing.*;
+import java.awt.event.*;
 
-		return opcao;
-	}
+public class MenuPrincipal {
 
+    static CadastroAlunos cadAluno = new CadastroAlunos();
+    static CadastroProfessores cadProfessor = new CadastroProfessores();
+    static CadastroDisciplinas cadDisciplina = new CadastroDisciplinas();
+
+    public static void menuOpcoes() {
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+
+
+        JButton alunosBttn = new JButton("Cadastro de alunos");
+        JButton professoresBttn = new JButton("Cadastro de professores");
+        JButton disciplinasBttn = new JButton("Cadastro de disciplinas");
+        JButton turmasBttn = new JButton("Cadastro de turmas");
+
+
+        panel.add(alunosBttn);
+        panel.add(professoresBttn);
+        panel.add(disciplinasBttn);
+        panel.add(turmasBttn);
+
+
+        Object[] options = {panel};
+
+        JOptionPane optionPane = new JOptionPane(
+                "Selecione sua opção:",
+                JOptionPane.PLAIN_MESSAGE,
+                JOptionPane.DEFAULT_OPTION,
+                null,
+                options,
+                null);
+
+
+        JDialog dialog = optionPane.createDialog("SGA - Sistema de Gestão Acadêmica");
+
+
+        alunosBttn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.setVisible(false);
+                MenuAluno.menuAluno(cadAluno);
+            }
+        });
+
+        professoresBttn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MenuProfessor.menuProfessor(cadProfessor);
+            }
+        });
+
+        disciplinasBttn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MenuDisciplina.menuDisciplinas(cadDisciplina);
+
+            }
+        });
+
+        turmasBttn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null,"Sistema de turmas à ser implementado.");
+            }
+        });
+
+        dialog.setVisible(true);
+    }
 }
