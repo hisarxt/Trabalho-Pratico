@@ -1,7 +1,13 @@
 package exceptions;
 
 public class ProfessorNaoEncontradoException extends Exception{
-	public ProfessorNaoEncontradoException(String mensagem) {
-		super(mensagem);
+	String message = "Professor não encontrado - matrícula FUB inválida?";
+	public ProfessorNaoEncontradoException() {
+
 	}
+	@Override
+	public String getMessage(){
+		return message;
+	}
+
 }

@@ -2,13 +2,16 @@ package view;
 
 import app.Professor;
 import cadastros.CadastroProfessores;
+import exceptions.CampoEmBrancoException;
+import exceptions.PesquisaEmBrancoException;
+import exceptions.ProfessorNaoEncontradoException;
 
 import javax.swing.*;
 import java.awt.event.*;
 
 public class MenuProfessor {
 
-    public static Professor telaCriacaoProfessor() {
+    public static Professor telaCriacaoProfessor() throws CampoEmBrancoException {
         Professor professor = new Professor();
 
         JTextField campo1 = new JTextField();
@@ -43,11 +46,9 @@ public class MenuProfessor {
                 String matriculaFub = campo4.getText();
                 String areaDeFormacao = campo5.getText();
 
-                if (nome.trim().isEmpty() || cpf.trim().isEmpty() || email.trim().isEmpty() || matriculaFub.trim().isEmpty()
-                        || areaDeFormacao.trim().isEmpty()) {
-                    // Lançar aqui a CampoEmBrancoException
-                    JOptionPane.showMessageDialog(null, "Nenhum campo pode estar vazio!",
-                            "Erro", JOptionPane.ERROR_MESSAGE);
+                if (nome.trim().isEmpty() || cpf.trim().isEmpty() || email.trim().isEmpty()
+                        || matriculaFub.trim().isEmpty() || areaDeFormacao.trim().isEmpty()) {
+                    throw new CampoEmBrancoException();
                 } else {
                     professor.setNome(nome);
                     professor.setCpf(cpf);
@@ -64,13 +65,14 @@ public class MenuProfessor {
         return null;
     }
 
-    private static Professor telaPesquisaProfessor(CadastroProfessores cadastroProfessores) {
+    private static Professor telaPesquisaProfessor(CadastroProfessores cadastroProfessores)
+            throws ProfessorNaoEncontradoException, PesquisaEmBrancoException {
 
 
         JTextField campo1 = new JTextField();
 
         JPanel painel = new JPanel();
-        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS)); // Layout para exibir um abaixo do outro
+        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
         painel.add(new JLabel("Matrícula FUB do professor:"));
         painel.add(campo1);
 
@@ -84,10 +86,13 @@ public class MenuProfessor {
 
 
                 if (matricula.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "O campo não pode estar vazio!",
-                            "Erro", JOptionPane.ERROR_MESSAGE);
+                    throw new PesquisaEmBrancoException();
                 } else {
                     Professor pesquisa = cadastroProfessores.pesquisarProfessores(matricula);
+                    if (pesquisa == null) {
+                        throw new ProfessorNaoEncontradoException();
+
+                    }
                     return pesquisa;
                 }
             } else {
@@ -98,65 +103,68 @@ public class MenuProfessor {
     }
 
     private static void cadastrarProfessor(CadastroProfessores cadastroProfessores) {
-        Professor novoProfessor = telaCriacaoProfessor();
-        cadastroProfessores.cadastrarProfessor(novoProfessor);
-        JOptionPane.showMessageDialog(null, "Professor '" + novoProfessor.getNome()
-                + "' cadastrado com sucesso.");
+        Professor novoProfessor = null;
+        try {
+            novoProfessor = telaCriacaoProfessor();
+            cadastroProfessores.cadastrarProfessor(novoProfessor);
+            JOptionPane.showMessageDialog(null, "Professor '" + novoProfessor.getNome()
+                    + "' cadastrado com sucesso.");
+        } catch (CampoEmBrancoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private static void pesquisarProfessor(CadastroProfessores cadastroProfessores) {
-        Professor pesquisa = telaPesquisaProfessor(cadastroProfessores);
-        if (pesquisa != null) {
+        Professor pesquisa = null;
+        try {
+            pesquisa = telaPesquisaProfessor(cadastroProfessores);
             JOptionPane.showMessageDialog(null, pesquisa.toString());
+        } catch (ProfessorNaoEncontradoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (PesquisaEmBrancoException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-        // Incluir exception aqui embaixo
-        else {
-            JOptionPane.showMessageDialog(null,
-                    "Professor não encontrado - matrícula FUB inválida?", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
-        }
+
     }
 
     private static void atualizarProfessor(CadastroProfessores cadastroProfessores) {
-        Professor pesquisa = telaPesquisaProfessor(cadastroProfessores);
-
-        if (pesquisa != null) {
-            Professor atualizacao = telaCriacaoProfessor();
-            cadastroProfessores.atualizarProfessores(pesquisa.getMatriculaFub(), atualizacao);
-
-            String mensagem = "Professor '" + atualizacao.getNome() + "' atualizado com sucesso.";
-            JOptionPane.showMessageDialog(null, mensagem);
+        Professor pesquisa = null;
+        try {
+            pesquisa = telaPesquisaProfessor(cadastroProfessores);
+        } catch (ProfessorNaoEncontradoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (PesquisaEmBrancoException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
-        // Incluir exception aqui embaixo
-        else {
-            JOptionPane.showMessageDialog(null,
-                    "Aluno não encontrado - matrícula inválida?", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
+
+        Professor atualizacao = null;
+        try {
+            atualizacao = telaCriacaoProfessor();
+            cadastroProfessores.atualizarProfessores(pesquisa.getMatriculaFub(), atualizacao);
+            String mensagem = "Professor '" + atualizacao.getNome() + "' atualizado com sucesso.";
+            JOptionPane.showMessageDialog(null, mensagem);
+        } catch (CampoEmBrancoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private static void removerProfessor(CadastroProfessores cadastroProfessores) {
-
-        Professor remover = telaPesquisaProfessor(cadastroProfessores);
-
-        if (remover != null) {
+        Professor remover = null;
+        try {
+            remover = telaPesquisaProfessor(cadastroProfessores);
             cadastroProfessores.removerProfessores(remover);
-
             String mensagem = "Professor '" + remover.getNome() + "' removido com sucesso.";
             JOptionPane.showMessageDialog(null, mensagem);
-        }
-        // Incluir exception aqui embaixo
-        else {
-            JOptionPane.showMessageDialog(null,
-                    "Professor não encontrado - matrícula FUB inválida?", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
+
+        } catch (ProfessorNaoEncontradoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (PesquisaEmBrancoException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     public static void menuProfessor(CadastroProfessores cadastroProfessores) {
-
-
         WindowListener windowListener = new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -192,9 +200,7 @@ public class MenuProfessor {
                 options,
                 null);
 
-
         JDialog dialog = optionPane.createDialog("Professores - menu");
-
 
         cadastrarProfessorBttn.addActionListener(new ActionListener() {
             @Override
@@ -235,5 +241,4 @@ public class MenuProfessor {
 
         dialog.setVisible(true);
     }
-
 }

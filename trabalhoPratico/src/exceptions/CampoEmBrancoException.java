@@ -1,7 +1,13 @@
 package exceptions;
 
 public class CampoEmBrancoException extends Exception {
-    public CampoEmBrancoException(String mensagem) {
-        super(mensagem);
+    String message = "Nenhum campo pode estar vazio!";
+
+    public CampoEmBrancoException() {
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
     }
 }
