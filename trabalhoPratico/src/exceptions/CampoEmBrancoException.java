@@ -48,6 +48,9 @@ public class CampoEmBrancoException extends Exception {
             case 3:
                 Collections.addAll(nomes, "Nome", "CPF", "E-Mail", "Matrícula FUB", "Área de Formação");
                 break;
+            case 4:
+                Collections.addAll(nomes, "Nome da Turma", "Código da Turma", "Código da Disciplina", "Matrícula FUB do Professor");
+                break;
         }
 
         String nulos = "";
