@@ -3,6 +3,7 @@ package view;
 import cadastros.CadastroAlunos;
 import cadastros.CadastroDisciplinas;
 import cadastros.CadastroProfessores;
+import cadastros.CadastroTurmas;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -12,6 +13,7 @@ public class MenuPrincipal {
     static CadastroAlunos cadAluno = new CadastroAlunos();
     static CadastroProfessores cadProfessor = new CadastroProfessores();
     static CadastroDisciplinas cadDisciplina = new CadastroDisciplinas();
+    static CadastroTurmas cadTurma = new CadastroTurmas();
 
     public static void menuOpcoes() {
 
@@ -57,6 +59,7 @@ public class MenuPrincipal {
         professoresBttn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                dialog.setVisible(false);
                 MenuProfessor.menuProfessor(cadProfessor);
             }
         });
@@ -64,6 +67,7 @@ public class MenuPrincipal {
         disciplinasBttn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                dialog.setVisible(false);
                 MenuDisciplina.menuDisciplinas(cadDisciplina);
 
             }
@@ -72,7 +76,8 @@ public class MenuPrincipal {
         turmasBttn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,"Sistema de turmas à ser implementado.");
+                dialog.setVisible(false);
+                MenuTurma.menuTurmas(cadTurma,cadProfessor,cadDisciplina,cadAluno);
             }
         });
 

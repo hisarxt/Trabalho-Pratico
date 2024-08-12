@@ -33,10 +33,12 @@ String matricula, curso;
 	}
 	
 	public String toString() {
-		String resposta = super.toString();
-		resposta += "MATRICULA: " + matricula + '\n';
-		resposta += "CURSO: " + curso + '\n';
-		return resposta; 
+		return "Aluno: " + "\n" +
+				"Matricula do Aluno = '" + matricula + '\'' + "\n" +
+				"Curso = '" + curso + '\'';
+	}
+
+}
 	}
 
 }

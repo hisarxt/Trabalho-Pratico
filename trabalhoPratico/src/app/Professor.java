@@ -34,10 +34,9 @@ public class Professor extends PessoaFisica{
 	}
 	
 	public String toString() {
-		String resposta = super.toString();
-		resposta += "MATRICULA: " + matriculaFub + '\n';
-		resposta += "AREA DE FORMACAO: " + areaFormacao + '\n';
-		return resposta;
+		return "Professor: " + "\n" +
+				"Matricula Fub do professor = '" + matriculaFub + '\'' + "\n" +
+				"Area de formacao: '" + areaFormacao + '\'';
 	}
 
 }

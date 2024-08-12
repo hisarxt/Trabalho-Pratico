@@ -122,7 +122,6 @@ public class MenuDisciplina {
         try {
             pesquisa = telaPesquisarDisciplina(cadastroDisciplinas);
             cadastroDisciplinas.removerDisciplina(pesquisa);
-            cadastroDisciplinas.removerDisciplina(pesquisa);
             String mensagem = "Disciplina '" + pesquisa.getNome() + "' removida com sucesso.";
             JOptionPane.showMessageDialog(null, mensagem);
         } catch (PesquisaEmBrancoException | DisciplinaNaoEncontradaException e) {

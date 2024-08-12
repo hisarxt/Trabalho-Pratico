@@ -34,11 +34,9 @@ private String nome, cpf, email;
 	}
 
 	public String toString() {
-		String resposta = super.toString() + '\n';
-		resposta += "NOME: " + nome + '\n';
-		resposta += "CPF: " + cpf + '\n';
-		resposta += "EMAIL: " + email + '\n';
-		return resposta;
+		return "Nome = '" + nome + '\'' + "\n" +
+				"CPF = '" + cpf + '\'' + "\n" +
+				"Email = '" + email + '\'';
 	}
 
 }
