@@ -8,6 +8,7 @@ import exceptions.ProfessorNaoEncontradoException;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.List;
 
 public class MenuProfessor {
 
@@ -48,7 +49,10 @@ public class MenuProfessor {
 
                 if (nome.trim().isEmpty() || cpf.trim().isEmpty() || email.trim().isEmpty()
                         || matriculaFub.trim().isEmpty() || areaDeFormacao.trim().isEmpty()) {
-                    throw new CampoEmBrancoException();
+
+                    String[] vetor = {nome,cpf,email,matriculaFub,areaDeFormacao};
+
+                    throw new CampoEmBrancoException(3,vetor);
                 } else {
                     professor.setNome(nome);
                     professor.setCpf(cpf);
@@ -119,10 +123,8 @@ public class MenuProfessor {
         try {
             pesquisa = telaPesquisaProfessor(cadastroProfessores);
             JOptionPane.showMessageDialog(null, pesquisa.toString());
-        } catch (ProfessorNaoEncontradoException e) {
+        } catch (PesquisaEmBrancoException | ProfessorNaoEncontradoException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        } catch (PesquisaEmBrancoException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -131,10 +133,8 @@ public class MenuProfessor {
         Professor pesquisa = null;
         try {
             pesquisa = telaPesquisaProfessor(cadastroProfessores);
-        } catch (ProfessorNaoEncontradoException e) {
+        } catch (ProfessorNaoEncontradoException | PesquisaEmBrancoException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        } catch (PesquisaEmBrancoException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
 
@@ -157,10 +157,8 @@ public class MenuProfessor {
             String mensagem = "Professor '" + remover.getNome() + "' removido com sucesso.";
             JOptionPane.showMessageDialog(null, mensagem);
 
-        } catch (ProfessorNaoEncontradoException e) {
+        } catch (PesquisaEmBrancoException | ProfessorNaoEncontradoException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        } catch (PesquisaEmBrancoException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
