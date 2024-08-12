@@ -55,8 +55,4 @@ public class CadastroTurmas {
             System.out.println(t.getCodigoDaTurma() + ": " + t.getProfessor().getNome() + " - " + t.getDisciplina().getNome());
         }
     }
-
-    public void imprimirListaDePresenca(Turma turma) {
-        turma.imprimirListaDePresenca();
-    }
 }

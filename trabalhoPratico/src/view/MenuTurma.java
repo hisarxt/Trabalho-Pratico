@@ -200,6 +200,17 @@ public class MenuTurma {
         }
     }
 
+    private static void imprimirListaDePresenca(CadastroTurmas cadastroTurmas) {
+        Turma turma = null;
+        try {
+            turma = telaPesquisarTurma(cadastroTurmas);
+            String listaDePresenca = turma.retornarListaDePresenca();
+            JOptionPane.showMessageDialog(null, listaDePresenca);
+        } catch (TurmaNaoEncontradaException | PesquisaEmBrancoException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void menuTurmas(CadastroTurmas cadastroTurmas, CadastroProfessores cadastroProfessores,
                                   CadastroDisciplinas cadastroDisciplinas, CadastroAlunos cadastroAlunos) {
 
@@ -218,6 +229,7 @@ public class MenuTurma {
         JButton pesquisarTurmaBttn = new JButton("Pesquisar Turma");
         JButton atualizarTurmaBttn = new JButton("Atualizar Turma");
         JButton matricularAlunoBttn = new JButton("Matricular aluno");
+        JButton imprimirListaDePresencaBttn = new JButton("Imprimir lista de presença");
         JButton removerTurmaBttn = new JButton("Remover Turma");
         JButton voltarBttn = new JButton("Voltar");
 
@@ -227,6 +239,7 @@ public class MenuTurma {
         panel.add(atualizarTurmaBttn);
         panel.add(removerTurmaBttn);
         panel.add(matricularAlunoBttn);
+        panel.add(imprimirListaDePresencaBttn);
         panel.add(voltarBttn);
 
 
@@ -270,6 +283,13 @@ public class MenuTurma {
             @Override
             public void actionPerformed(ActionEvent e) {
                 matricularAluno(cadastroTurmas, cadastroAlunos);
+            }
+        });
+
+        imprimirListaDePresencaBttn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                imprimirListaDePresenca(cadastroTurmas);
             }
         });
 
