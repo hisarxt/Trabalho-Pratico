@@ -2,13 +2,18 @@ package view;
 
 import app.Disciplina;
 import cadastros.CadastroDisciplinas;
+import exceptions.CampoEmBrancoException;
+import exceptions.DisciplinaNaoEncontradaException;
+import exceptions.PesquisaEmBrancoException;
 
 import javax.swing.*;
 import java.awt.event.*;
 
 public class MenuDisciplina {
 
-    private static Disciplina telaPesquisarDisciplina(CadastroDisciplinas cadastroDisciplinas) {
+    private static Disciplina telaPesquisarDisciplina(CadastroDisciplinas cadastroDisciplinas)
+            throws DisciplinaNaoEncontradaException, PesquisaEmBrancoException {
+
         JTextField campo1 = new JTextField();
 
         JPanel painel = new JPanel();
@@ -24,10 +29,12 @@ public class MenuDisciplina {
             if (resultado == JOptionPane.OK_OPTION) {
                 String codigoDaDisciplina = campo1.getText();
                 if (codigoDaDisciplina.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "O campo não pode estar vazio!",
-                            "Erro", JOptionPane.ERROR_MESSAGE);
+                    throw new PesquisaEmBrancoException();
                 } else {
                     Disciplina pesquisa = cadastroDisciplinas.pesquisarDisciplina(codigoDaDisciplina);
+                    if (pesquisa == null) {
+                        throw new DisciplinaNaoEncontradaException();
+                    }
                     return pesquisa;
                 }
             } else {
@@ -37,7 +44,7 @@ public class MenuDisciplina {
         return null;
     }
 
-    private static Disciplina telaCriarDisciplina() {
+    private static Disciplina telaCriarDisciplina() throws CampoEmBrancoException {
         JTextField campo1 = new JTextField();
         JTextField campo2 = new JTextField();
 
@@ -58,9 +65,8 @@ public class MenuDisciplina {
                 String codigoDaDisciplina = campo2.getText();
 
                 if (nome.trim().isEmpty() || codigoDaDisciplina.trim().isEmpty()) {
-                    // Lançar aqui a CampoEmBrancoException
-                    JOptionPane.showMessageDialog(null, "Nenhum campo pode estar vazio!",
-                            "Erro", JOptionPane.ERROR_MESSAGE);
+                    String[] vetor = {nome, codigoDaDisciplina};
+                    throw new CampoEmBrancoException(2, vetor);
                 } else {
                     Disciplina disciplina = new Disciplina(nome, codigoDaDisciplina);
                     return disciplina;
@@ -74,55 +80,54 @@ public class MenuDisciplina {
 
 
     private static void cadastrarDisciplina(CadastroDisciplinas cadastroDisciplinas) {
-        Disciplina disciplina = telaCriarDisciplina();
-        cadastroDisciplinas.cadastrarDisciplina(disciplina);
-        String mensagem = "Disciplina '" + disciplina.getNome() + "' criada com sucesso.";
-        JOptionPane.showMessageDialog(null, mensagem);
+        Disciplina disciplina = null;
+        try {
+            disciplina = telaCriarDisciplina();
+            cadastroDisciplinas.cadastrarDisciplina(disciplina);
+            String mensagem = "Disciplina '" + disciplina.getNome() + "' criada com sucesso.";
+            JOptionPane.showMessageDialog(null, mensagem);
+        } catch (CampoEmBrancoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private static void pesquisarDisciplina(CadastroDisciplinas cadastroDisciplinas) {
-        Disciplina pesquisa = telaPesquisarDisciplina(cadastroDisciplinas);
-        if (pesquisa != null) {
+        Disciplina pesquisa = null;
+        try {
+            pesquisa = telaPesquisarDisciplina(cadastroDisciplinas);
             JOptionPane.showMessageDialog(null, pesquisa.toString());
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Disciplina não encontrada - código inválido?", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
+        } catch (PesquisaEmBrancoException | DisciplinaNaoEncontradaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
 
     private static void atualizarDisciplina(CadastroDisciplinas cadastroDisciplinas) {
-        Disciplina pesquisa = telaPesquisarDisciplina(cadastroDisciplinas);
-        if (pesquisa != null) {
+        Disciplina pesquisa = null;
+        try {
+            pesquisa = telaPesquisarDisciplina(cadastroDisciplinas);
             Disciplina novaDisciplina = telaCriarDisciplina();
             cadastroDisciplinas.atualizarDisciplina(pesquisa.getCodigoDisciplina(), novaDisciplina);
-
             String mensagem = "Disciplina '" + novaDisciplina.getNome() + "' atualizada com sucesso.";
             JOptionPane.showMessageDialog(null, mensagem);
-
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Disciplina não encontrada - código inválido?", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
+        } catch (CampoEmBrancoException | PesquisaEmBrancoException | DisciplinaNaoEncontradaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
+
     }
 
-    private static void removerDisciplina(CadastroDisciplinas cadastroDisciplinas) {
-        Disciplina pesquisa = telaPesquisarDisciplina(cadastroDisciplinas);
-        cadastroDisciplinas.removerDisciplina(pesquisa);
-        if (pesquisa != null) {
-            cadastroDisciplinas.removerDisciplina(pesquisa);
 
+    private static void removerDisciplina(CadastroDisciplinas cadastroDisciplinas) {
+        Disciplina pesquisa = null;
+        try {
+            pesquisa = telaPesquisarDisciplina(cadastroDisciplinas);
+            cadastroDisciplinas.removerDisciplina(pesquisa);
+            cadastroDisciplinas.removerDisciplina(pesquisa);
             String mensagem = "Disciplina '" + pesquisa.getNome() + "' removida com sucesso.";
             JOptionPane.showMessageDialog(null, mensagem);
-
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Disciplina não encontrada - código inválido?", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
+        } catch (PesquisaEmBrancoException | DisciplinaNaoEncontradaException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     public static void menuDisciplinas(CadastroDisciplinas cadastroDisciplinas) {

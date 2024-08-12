@@ -1,59 +1,34 @@
 package view;
 
+import app.Turma;
+import app.Disciplina;
+import app.Professor;
+import cadastros.CadastroTurmas;
+import cadastros.CadastroDisciplinas;
+import cadastros.CadastroProfessores;
+import exceptions.CampoEmBrancoException;
+import exceptions.DisciplinaNaoEncontradaException;
+import exceptions.ProfessorNaoEncontradoException;
+
 import javax.swing.*;
 import java.awt.event.*;
 
-import app.Turma;
-import cadastros.CadastroTurmas;
-import app.Disciplina;
-import cadastros.CadastroDisciplinas;
-import app.Professor;
-import cadastros.CadastroProfessores;
-
 public class MenuTurma {
 
-    private static Turma telaPesquisarTurma(CadastroTurmas cadastroTurmas) {
-        JTextField campo1 = new JTextField();
-
-        JPanel painel = new JPanel();
-        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
-        painel.add(new JLabel("Código da Turma:"));
-        painel.add(campo1);
-
-        int resultado;
-        do {
-            resultado = JOptionPane.showConfirmDialog(null, painel, "Pesquisa de Turma",
-                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-            if (resultado == JOptionPane.OK_OPTION) {
-                String codigoDaTurma = campo1.getText();
-
-                if (codigoDaTurma.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "O campo não pode estar vazio!",
-                            "Erro", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    Turma pesquisa = cadastroTurmas.pesquisarTurma(codigoDaTurma);
-                    return pesquisa;
-                }
-            } else {
-                break;
-            }
-        } while (true);
-        return null;
-    }
-
-    private static Turma telaCriarTurma(CadastroProfessores cadastroProfessores, CadastroDisciplinas cadastroDisciplinas) {
+    private static Turma telaCriarTurma(CadastroDisciplinas cadastroDisciplinas, CadastroProfessores cadastroProfessores)
+            throws CampoEmBrancoException, DisciplinaNaoEncontradaException, ProfessorNaoEncontradoException {
+        
         JTextField campo1 = new JTextField();
         JTextField campo2 = new JTextField();
         JTextField campo3 = new JTextField();
 
         JPanel painel = new JPanel();
         painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
-        painel.add(new JLabel("Código da Turma:"));
+        painel.add(new JLabel("Nome da Turma:"));
         painel.add(campo1);
-        painel.add(new JLabel("Matrícula do Professor:"));
-        painel.add(campo2);
         painel.add(new JLabel("Código da Disciplina:"));
+        painel.add(campo2);
+        painel.add(new JLabel("Matricula do Professor:"));
         painel.add(campo3);
 
         int resultado;
@@ -63,30 +38,58 @@ public class MenuTurma {
 
             if (resultado == JOptionPane.OK_OPTION) {
                 String codigoDaTurma = campo1.getText();
-                String matriculaFubProfessor = campo2.getText();
-                String codigoDaDisciplina = campo3.getText();
+                String codigoDisciplina = campo2.getText();
+                String matriculaFub = campo3.getText();
 
-                if (codigoDaTurma.trim().isEmpty() || matriculaFubProfessor.trim().isEmpty() || codigoDaDisciplina.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Nenhum campo pode estar vazio!",
-                            "Erro", JOptionPane.ERROR_MESSAGE);
+                if (codigoDaTurma.trim().isEmpty() || codigoDisciplina.trim().isEmpty() || matriculaFub.trim().isEmpty()) {
+                    String[] vetor = {codigoDaTurma, codigoDisciplina, matriculaFub};
+                    throw new CampoEmBrancoException(3, vetor);
+                }
+
+                Disciplina disciplina = cadastroDisciplinas.pesquisarDisciplina(codigoDisciplina);
+                if (disciplina == null) {
+                    throw new DisciplinaNaoEncontradaException();
+                }
+
+                Professor professor = cadastroProfessores.pesquisarProfessores(matriculaFub);
+                if (professor == null) {
+                    throw new ProfessorNaoEncontradoException();
+                }
+
+                Turma turma = new Turma(codigoDaTurma, matriculaFub, disciplina, professor);
+                return turma;
+            } else {
+                break;
+            }
+        } while (true);
+        return null;
+    }
+
+    private static Turma telaPesquisarTurma(CadastroTurmas cadastroTurmas)
+            throws CampoEmBrancoException {
+
+        JTextField campo1 = new JTextField();
+
+        JPanel painel = new JPanel();
+        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
+        painel.add(new JLabel("Nome da Turma:"));
+        painel.add(campo1);
+
+        int resultado;
+        do {
+            resultado = JOptionPane.showConfirmDialog(null, painel, "Pesquisa de Turma",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+            if (resultado == JOptionPane.OK_OPTION) {
+                String nome = campo1.getText();
+                if (nome.trim().isEmpty()) {
+                    throw new CampoEmBrancoException(resultado, null);
                 } else {
-                    Professor professor = cadastroProfessores.pesquisarProfessores(matriculaFubProfessor);
-                    Disciplina disciplina = cadastroDisciplinas.pesquisarDisciplina(codigoDaDisciplina);
-
-                    if (professor == null) {
-                        JOptionPane.showMessageDialog(null, "Professor não encontrado!",
-                                "Erro", JOptionPane.ERROR_MESSAGE);
-                        return null;
+                    Turma pesquisa = cadastroTurmas.pesquisarTurma(nome);
+                    if (pesquisa == null) {
+                        System.out.println("Turma nao encontrada!");
                     }
-
-                    if (disciplina == null) {
-                        JOptionPane.showMessageDialog(null, "Disciplina não encontrada!",
-                                "Erro", JOptionPane.ERROR_MESSAGE);
-                        return null;
-                    }
-
-                    Turma turma = new Turma(codigoDaTurma, professor, disciplina);
-                    return turma;
+                    return pesquisa;
                 }
             } else {
                 break;
@@ -95,56 +98,55 @@ public class MenuTurma {
         return null;
     }
 
-    private static void cadastrarTurma(CadastroTurmas cadastroTurmas, CadastroProfessores cadastroProfessores, CadastroDisciplinas cadastroDisciplinas) {
-        Turma turma = telaCriarTurma(cadastroProfessores, cadastroDisciplinas);
-        if (turma != null) {
-            cadastroTurmas.cadastrarTurma(turma.getCodigoDaTurma(), turma.getProfessor().getMatriculaFub(), turma.getDisciplina().getCodigoDisciplina());
-            String mensagem = "Turma '" + turma.getCodigoDaTurma() + "' criada com sucesso.";
+    private static void cadastrarTurma(CadastroTurmas cadastroTurmas, CadastroDisciplinas cadastroDisciplinas, CadastroProfessores cadastroProfessores) {
+        Turma turma = null;
+        try {
+            turma = telaCriarTurma(cadastroDisciplinas, cadastroProfessores);
+            cadastroTurmas.cadastrarTurma(turma);
+            String mensagem = "Turma '" + turma.getNome() + "' criada com sucesso.";
             JOptionPane.showMessageDialog(null, mensagem);
+        } catch (CampoEmBrancoException | DisciplinaNaoEncontradaException | ProfessorNaoEncontradoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private static void pesquisarTurma(CadastroTurmas cadastroTurmas) {
-        Turma pesquisa = telaPesquisarTurma(cadastroTurmas);
-        if (pesquisa != null) {
+        Turma pesquisa = null;
+        try {
+            pesquisa = telaPesquisarTurma(cadastroTurmas);
             JOptionPane.showMessageDialog(null, pesquisa.toString());
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Turma não encontrada - código inválido?", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
+        } catch (CampoEmBrancoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private static void atualizarTurma(CadastroTurmas cadastroTurmas, CadastroProfessores cadastroProfessores, CadastroDisciplinas cadastroDisciplinas) {
-        Turma pesquisa = telaPesquisarTurma(cadastroTurmas);
-        if (pesquisa != null) {
-            Turma novaTurma = telaCriarTurma(cadastroProfessores, cadastroDisciplinas);
-            if (novaTurma != null) {
-                cadastroTurmas.atualizarTurma(pesquisa.getCodigoDaTurma(), novaTurma);
-                String mensagem = "Turma '" + novaTurma.getCodigoDaTurma() + "' atualizada com sucesso.";
-                JOptionPane.showMessageDialog(null, mensagem);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Turma não encontrada - código inválido?", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
+    private static void atualizarTurma(CadastroTurmas cadastroTurmas, CadastroDisciplinas cadastroDisciplinas, CadastroProfessores cadastroProfessores) {
+        Turma pesquisa = null;
+        try {
+            pesquisa = telaPesquisarTurma(cadastroTurmas);
+            Turma novaTurma = telaCriarTurma(cadastroDisciplinas, cadastroProfessores);
+            cadastroTurmas.atualizarTurma(pesquisa.getCodigoDaTurma(), novaTurma);
+            String mensagem = "Turma '" + novaTurma.getCodigoDaTurma() + "' atualizada com sucesso.";
+            JOptionPane.showMessageDialog(null, mensagem);
+        } catch (CampoEmBrancoException | DisciplinaNaoEncontradaException | ProfessorNaoEncontradoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private static void removerTurma(CadastroTurmas cadastroTurmas) {
-        Turma pesquisa = telaPesquisarTurma(cadastroTurmas);
-        if (pesquisa != null) {
-            cadastroTurmas.removerTurma(pesquisa.getCodigoDaTurma());
+        Turma pesquisa = null;
+        try {
+            pesquisa = telaPesquisarTurma(cadastroTurmas);
+            cadastroTurmas.removerTurma(pesquisa);
             String mensagem = "Turma '" + pesquisa.getCodigoDaTurma() + "' removida com sucesso.";
             JOptionPane.showMessageDialog(null, mensagem);
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Turma não encontrada - código inválido?", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
+        } catch (CampoEmBrancoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public static void menuTurmas(CadastroTurmas cadastroTurmas, CadastroProfessores cadastroProfessores, CadastroDisciplinas cadastroDisciplinas) {
+    public static void menuTurmas(CadastroTurmas cadastroTurmas, CadastroDisciplinas cadastroDisciplinas, CadastroProfessores cadastroProfessores) {
+
         WindowListener windowListener = new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -182,7 +184,7 @@ public class MenuTurma {
         cadastrarTurmaBttn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cadastrarTurma(cadastroTurmas, cadastroProfessores, cadastroDisciplinas);
+                cadastrarTurma(cadastroTurmas, cadastroDisciplinas, cadastroProfessores);
             }
         });
 
@@ -196,7 +198,7 @@ public class MenuTurma {
         atualizarTurmaBttn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                atualizarTurma(cadastroTurmas, cadastroProfessores, cadastroDisciplinas);
+                atualizarTurma(cadastroTurmas, cadastroDisciplinas, cadastroProfessores);
             }
         });
 
@@ -215,5 +217,7 @@ public class MenuTurma {
         });
 
         dialog.addWindowListener(windowListener);
+
         dialog.setVisible(true);
     }
+}

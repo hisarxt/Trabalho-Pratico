@@ -2,12 +2,15 @@ package view;
 
 import app.Aluno;
 import cadastros.CadastroAlunos;
+import exceptions.AlunoNaoEncontradoException;
+import exceptions.CampoEmBrancoException;
+import exceptions.PesquisaEmBrancoException;
 
 import javax.swing.*;
 import java.awt.event.*;
 
 public class MenuAluno {
-    private static Aluno telaCriacaoAluno() {
+    private static Aluno telaCriacaoAluno() throws CampoEmBrancoException {
         Aluno aluno = new Aluno();
 
         JTextField campo1 = new JTextField();
@@ -44,9 +47,9 @@ public class MenuAluno {
 
                 if (nome.trim().isEmpty() || cpf.trim().isEmpty() || email.trim().isEmpty() || matricula.trim().isEmpty()
                         || curso.trim().isEmpty()) {
-                    // Lançar aqui a CampoEmBrancoException
-                    JOptionPane.showMessageDialog(null, "Nenhum campo pode estar vazio!",
-                            "Erro", JOptionPane.ERROR_MESSAGE);
+
+                    String[] vetor = {nome,cpf,email,matricula,curso};
+                    throw new CampoEmBrancoException(1,vetor);
                 } else {
                     aluno.setNome(nome);
                     aluno.setCpf(cpf);
@@ -63,7 +66,8 @@ public class MenuAluno {
         return null;
     }
 
-    private static Aluno telaPesquisaAluno(CadastroAlunos cadastroAlunos) {
+    private static Aluno telaPesquisaAluno(CadastroAlunos cadastroAlunos) throws PesquisaEmBrancoException,
+            AlunoNaoEncontradoException {
 
         JTextField campo1 = new JTextField();
 
@@ -80,12 +84,13 @@ public class MenuAluno {
             if (resultado == JOptionPane.OK_OPTION) {
                 String matricula = campo1.getText();
 
-
                 if (matricula.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "O campo não pode estar vazio!",
-                            "Erro", JOptionPane.ERROR_MESSAGE);
+                    throw new PesquisaEmBrancoException();
                 } else {
                     Aluno pesquisa = cadastroAlunos.pesquisarAlunos(matricula);
+                    if (pesquisa == null) {
+                        throw new AlunoNaoEncontradoException();
+                    }
                     return pesquisa;
                 }
             } else {
@@ -96,58 +101,49 @@ public class MenuAluno {
     }
 
     private static void cadastrarAluno(CadastroAlunos cadastroAlunos) {
-        Aluno novoAluno = telaCriacaoAluno();
-        cadastroAlunos.cadastrarAluno(novoAluno);
-        JOptionPane.showMessageDialog(null, "Aluno '" + novoAluno.getNome()
-                + "' cadastrado com sucesso.");
+        Aluno novoAluno = null;
+        try {
+            novoAluno = telaCriacaoAluno();
+            cadastroAlunos.cadastrarAluno(novoAluno);
+            JOptionPane.showMessageDialog(null, "Aluno '" + novoAluno.getNome()
+                    + "' cadastrado com sucesso.");
+        } catch (CampoEmBrancoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private static void pesquisarAluno(CadastroAlunos cadastroAlunos) {
-        Aluno pesquisa = telaPesquisaAluno(cadastroAlunos);
-        if (pesquisa != null) {
+        Aluno pesquisa = null;
+        try {
+            pesquisa = telaPesquisaAluno(cadastroAlunos);
             JOptionPane.showMessageDialog(null, pesquisa.toString());
-        }
-        // Incluir exception aqui embaixo
-        else {
-            JOptionPane.showMessageDialog(null,
-                    "Aluno não encontrado - matrícula inválida?", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
+        } catch (PesquisaEmBrancoException | AlunoNaoEncontradoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private static void atualizarAluno(CadastroAlunos cadastroAlunos) {
-        Aluno pesquisa = telaPesquisaAluno(cadastroAlunos);
-
-        if (pesquisa != null) {
+        Aluno pesquisa = null;
+        try {
+            pesquisa = telaPesquisaAluno(cadastroAlunos);
             Aluno atualizacao = telaCriacaoAluno();
             cadastroAlunos.atualizarAluno(pesquisa.getMatricula(), atualizacao);
-
             String mensagem = "Aluno '" + atualizacao.getNome() + "' atualizado com sucesso.";
             JOptionPane.showMessageDialog(null, mensagem);
-        }
-
-        // Incluir exception aqui embaixo
-        else {
-            JOptionPane.showMessageDialog(null,
-                    "Aluno não encontrado - matrícula inválida?", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
+        } catch (CampoEmBrancoException | PesquisaEmBrancoException | AlunoNaoEncontradoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private static void removerAluno(CadastroAlunos cadastroAlunos) {
-        Aluno remover = telaPesquisaAluno(cadastroAlunos);
-
-        if (remover != null) {
+        Aluno remover = null;
+        try {
+            remover = telaPesquisaAluno(cadastroAlunos);
             cadastroAlunos.removerAlunos(remover);
-
             String mensagem = "Aluno '" + remover.getNome() + "' removido com sucesso.";
             JOptionPane.showMessageDialog(null, mensagem);
-        }
-        // Incluir exception aqui embaixo
-        else {
-            JOptionPane.showMessageDialog(null,
-                    "Aluno não encontrado - matrícula inválida?", "Erro",
-                    JOptionPane.ERROR_MESSAGE);
+        } catch (PesquisaEmBrancoException | AlunoNaoEncontradoException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
