@@ -42,7 +42,9 @@ public class CampoEmBrancoException extends Exception {
             case 1:
                 Collections.addAll(nomes, "Nome", "CPF", "E-Mail", "Matrícula", "Curso");
                 break;
-
+            case 2:
+                Collections.addAll(nomes, "Nome", "Código da Disciplina");
+                break;
             case 3:
                 Collections.addAll(nomes, "Nome", "CPF", "E-Mail", "Matrícula FUB", "Área de Formação");
                 break;
