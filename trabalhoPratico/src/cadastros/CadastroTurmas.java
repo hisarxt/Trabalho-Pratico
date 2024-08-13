@@ -48,11 +48,4 @@ public class CadastroTurmas {
         turma.matricularAluno(aluno);
     }
 
-
-    public void listarTurmas() {
-        System.out.println("Lista de turmas:");
-        for (Turma t : turmas) {
-            System.out.println(t.getCodigoDaTurma() + ": " + t.getProfessor().getNome() + " - " + t.getDisciplina().getNome());
-        }
-    }
 }

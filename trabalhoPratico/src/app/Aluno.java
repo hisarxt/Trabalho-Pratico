@@ -16,10 +16,6 @@ public class Aluno extends PessoaFisica {
         return matricula;
     }
 
-    public final String getCurso() {
-        return curso;
-    }
-
     public void setMatricula(String matricula) {
         this.matricula = matricula;
     }

@@ -13,8 +13,6 @@ public class Disciplina {
                 "Código da Disciplina = '" +  codigoDisciplina + '\'';
     }
 
-    ArrayList<Turma> turmas = new ArrayList<Turma>();
-
     public Disciplina(String nome, String codigoDisciplina) {
         this.nome = nome;
         this.codigoDisciplina = codigoDisciplina;
@@ -28,11 +26,4 @@ public class Disciplina {
         return codigoDisciplina;
     }
 
-    public ArrayList<Turma> getTurmas() {
-        return turmas;
-    }
-
-    public void adicionarTurma(Turma turma){
-        this.turmas.add(turma);
-    }
 }

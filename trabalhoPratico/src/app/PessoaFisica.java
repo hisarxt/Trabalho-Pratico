@@ -1,42 +1,37 @@
 package app;
 
 public class PessoaFisica {
-private String nome, cpf, email;
+    private String nome, cpf, email;
 
-	public PessoaFisica() {
-	}
+    public PessoaFisica() {
+    }
 
-	public PessoaFisica(String nome, String cpf, String email) {
-		this.nome = nome;
-		this.cpf = cpf;
-		this.email = email;
-	}
-	public final String getNome() {
-		return nome; 
-	}
-	public final String getCpf() {
-		return cpf;
-	}
-	public final String getEmail() {
-		return email;
-	}
+    public PessoaFisica(String nome, String cpf, String email) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
+    }
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public final String getNome() {
+        return nome;
+    }
 
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
 
-	public String toString() {
-		return "Nome = '" + nome + '\'' + "\n" +
-				"CPF = '" + cpf + '\'' + "\n" +
-				"Email = '" + email + '\'';
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String toString() {
+        return "Nome = '" + nome + '\'' + "\n" +
+                "CPF = '" + cpf + '\'' + "\n" +
+                "Email = '" + email + '\'';
+    }
 
 }

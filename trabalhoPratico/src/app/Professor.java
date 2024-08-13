@@ -16,10 +16,6 @@ public class Professor extends PessoaFisica{
 	public final String getMatriculaFub() {
 		return matriculaFub;
 	}
-	
-	public final String getAreaFormacao() {
-		return areaFormacao;
-	}
 
 	public void setMatriculaFub(String matriculaFub) {
 		this.matriculaFub = matriculaFub;

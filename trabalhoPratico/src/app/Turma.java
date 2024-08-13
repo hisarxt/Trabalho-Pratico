@@ -8,8 +8,6 @@ public class Turma {
     Disciplina disciplina;
     Professor professor;
     ArrayList<Aluno> alunosMatriculados = new ArrayList<Aluno>();
-    Sala sala;
-    String horario;
 
     public Turma(String nome, String codigoDaTurma, Disciplina disciplina, Professor professor) {
         this.nome = nome;
@@ -24,14 +22,6 @@ public class Turma {
 
     public String getCodigoDaTurma() {
         return codigoDaTurma;
-    }
-
-    public Disciplina getDisciplina() {
-        return disciplina;
-    }
-
-    public Professor getProfessor() {
-        return professor;
     }
 
     public void matricularAluno(Aluno aluno) {
