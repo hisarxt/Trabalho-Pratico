@@ -112,5 +112,3 @@ Preenche os seguintes campos no formulário de cadastro:
   Uma mensagem de confirmacao e exibida ao usuario:
   
   Aluno 'Joao' cadastrado com sucesso!
-
-  ### Exemplo 3
