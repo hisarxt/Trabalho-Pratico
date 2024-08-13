@@ -52,10 +52,11 @@ public class Turma {
     }
 
     public String toString() {
-    	return "Turma: " + "\n" +
-    			"Codigo da Turma = '" + codigoDaTurma + '\'' + "\n" +
-    			"Professor = '" + professor + '\'' + "\n" +
-    			"Disciplina = '" + disciplina + '\'';
-  			
+        return "Turma: " + "\n" +
+                "Nome = '" + nome + "'\n" +
+                "Código da Turma = '" + codigoDaTurma + '\'' + "\n" +
+                "Professor = '" + professor.getNome() + '\'' + "\n" +
+                "Disciplina = '" + disciplina.getNome() + '\'';
+
     }
 }
